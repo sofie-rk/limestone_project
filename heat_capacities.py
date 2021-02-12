@@ -15,7 +15,7 @@ E_w_g=0.082139
 cp_2 = A_w_g + B_w_g*x + C_w_g*x**2 + D_w_g*x**3 + E_w_g/x**2
 
 c = integrate(cp(A_w_g, B_w_g, C_w_g, D_w_g, E_w_g, x), (x, (100+273)/1000, (300+273)/1000))
-print(c)
+# print(c)
 
 
 #constants for liquid water [J/mol*K]
