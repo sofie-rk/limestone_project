@@ -1,5 +1,8 @@
-def cp(A, B, C, D, E):
-    cp= A+B*t+C*t**2+D*t**3+E/t**2
+from sympy.abc import x
+from sympy import integrate
+
+def cp(A, B, C, D, E, t):
+    cp= A + B*t + C*t**2 + D*t**3 + E/t**2
     return cp
 
 # constants for gaseous water [J/mol*K]
@@ -8,6 +11,12 @@ B_w_g=6.832514
 C_w_g=6.793435
 D_w_g=-2.534480	
 E_w_g=0.082139
+
+cp_2 = A_w_g + B_w_g*x + C_w_g*x**2 + D_w_g*x**3 + E_w_g/x**2
+
+c = integrate(cp(A_w_g, B_w_g, C_w_g, D_w_g, E_w_g, x), (x, (100+273)/1000, (300+273)/1000))
+print(c)
+
 
 #constants for liquid water [J/mol*K]
 A_w_l=-203.6060
