@@ -39,11 +39,17 @@ Q_fg = integrate(   x_CO2 * cp(A_CO2, B_CO2, C_CO2, D_CO2, E_CO2, x) + \
                         , (x, T_fg_in/1000, T_fg_out/1000))
 
 
+
+### HEAT LOSS TO THE ENVIRONMENT ###
+
+Q_heat_loss = 0
+
+
 ### ENERGY BALANCE ###
 
-# LHV * m_c = Q_evaporation + Q_reaction + Q_flue gas
+# LHV * mass_coal = Q_evaporation + Q_reaction + Q_heat_loss + Q_CO2 + Q_fl*n_fg*mass_coal
 
-mass_coal = (Q_evaporation + Q_reaction + Q_CO2) / (LHV_coal - Q_fg*n_fg)
+mass_coal = (Q_evaporation + Q_reaction + Q_CO2 + Q_heat_loss) / (LHV_coal - Q_fg*n_fg)
 
 
 print("Q flue gas: " , Q_fg)
