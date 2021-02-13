@@ -2,9 +2,6 @@
 # fg:   flue gas
 # ls:   limestone (CaCO3)
 
-
-
-
 ### TEMPERATURES ###
 T_limestone = 25 + 273  # [K]
 T_fg_in = 25 + 273      # [K] 
@@ -17,7 +14,7 @@ Mm_H2O = 18.02*10**(-3)
 
 ### INITIAL CONDITIONS ###
 m_ls_wet = 115000 * 1000            # [kg] wet limestone
-w_H2O_ls = 0.07                     # [-] weight percent H2O in limestone
+w_H2O_ls = 7/100                    # [-] weight percent H2O in limestone
 
 m_ls_dry = m_ls_wet * (1-w_H2O_ls)  # [kg] mass dry limestone
 m_H2O_ls = m_ls_wet * w_H2O_ls      # [kg] mass H2O in wet limestone
@@ -37,7 +34,7 @@ LHV_coal = 28.4 * 10**3 # [kJ/kg coal] heating value of coal
 x_CO2 = 14.4/100
 x_N2 = 75.3/100
 x_SO2 = 0.1/100
-x_NO = 0.3
+x_NO = 0.3/100
 x_Cl2 = 0.001/100
 x_H2O = 6.6/100
 x_O2 = 3.3/100
