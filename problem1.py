@@ -52,8 +52,8 @@ Q_heat_loss = 0
 mass_coal = (Q_evaporation + Q_reaction + Q_CO2 + Q_heat_loss) / (LHV_coal - Q_fg*n_fg)
 
 
-print("Q flue gas: " , Q_fg)
-print("Q reaction: ", Q_reaction)
-print("Q evaporation: ", Q_evaporation)
+# print("Q flue gas: " , Q_fg)
+# print("Q reaction: ", Q_reaction)
+# print("Q evaporation: ", Q_evaporation)
 
-print("MASS COAL: ", mass_coal)
+print("MASS COAL: ", round(mass_coal/1000), " tonnes")
