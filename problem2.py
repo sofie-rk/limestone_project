@@ -1,19 +1,16 @@
-from values import x_CO2, x_N2, x_SO2, x_NO, x_Cl2, x_H2O, x_O2
-from values import n_fg, n_ls_dry, n_H2O_ls
+from values import x_CO2_in, x_N2_in, x_SO2_in, x_NO_in, x_Cl2_in, x_H2O_in, x_O2_in
+from values import n_fg, n_H2O_ls, n_CO2_gen
 from problem1 import mass_coal
 
 
 ### CALCULATING AMOUNT OF FLUEGAS AT THE ENTRY BASED ON TABLE 3 ###
-n_CO2_in    = x_CO2     * n_fg * mass_coal
-n_N2_in     = x_N2      * n_fg * mass_coal
-n_SO2_in    = x_SO2     * n_fg * mass_coal
-n_NO_in     = x_NO      * n_fg * mass_coal
-n_Cl2_in    = x_Cl2     * n_fg * mass_coal
-n_H2O_in    = x_H2O     * n_fg * mass_coal
-n_O2_in     = x_O2      * n_fg * mass_coal
-
-### CO2 generated in the reaction is equal to mol of dry limestone  ###
-n_CO2_gen = n_ls_dry
+n_CO2_in    = x_CO2_in     * n_fg * mass_coal
+n_N2_in     = x_N2_in      * n_fg * mass_coal
+n_SO2_in    = x_SO2_in     * n_fg * mass_coal
+n_NO_in     = x_NO_in      * n_fg * mass_coal
+n_Cl2_in    = x_Cl2_in     * n_fg * mass_coal
+n_H2O_in    = x_H2O_in     * n_fg * mass_coal
+n_O2_in     = x_O2_in      * n_fg * mass_coal
 
 ### H2O vapor is generated from evaporation of water in the wet limestone ###
 n_H2O_gen = n_H2O_ls
