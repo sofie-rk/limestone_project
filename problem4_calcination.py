@@ -1,129 +1,179 @@
+# numpy makes math in python easier
+import numpy as np
+from numpy import pi
+
+# matplotlib.pyplot is used for plotting
+import matplotlib.pyplot as plt
+
+# scipy.integrate.odeint is used for solving ODE
+from scipy.integrate import odeint
+
+# sympy.solvers.solve is used to solve equations for Tc
 from sympy.solvers import solve
 from sympy import Symbol
 
-from scipy.integrate import odeint
-
-from numpy import pi
-import numpy as np
-
-from values import n_fg, x_H2O_in, x_CO2_in, n_H2O_ls
-from values import m_ls_dry, n_ls_dry_pure, n_CO2_gen, density_ls
-from values import weights_psd, radii_psd, w1, w2, w3, r1, r2, r3
-from values import r_kiln, A_cross_sectional_kiln, N, S, D_ft
-from values import Mm_CO2, Mm_H2O, Mm_CO2, Mm_N2, Mm_SO2, Mm_NO, Mm_Cl2, Mm_O2, Mm_ls
-from values import x_CO2_in, x_N2_in, x_SO2_in, x_NO_in, x_Cl2_in, x_H2O_in, x_O2_in
+# importing necessary values from other files
+from values import r1, r2, r3, w1, w2, w3
+from values import deltaH_rxn
+from values import density_ls, Mm_ls, lamda_cond, Mm_CO2
 from values import T_g_calcination
-
-from values import lamda_cond, deltaH_rxn
-
+from values import n_fg, x_CO2_in, n_ls_dry_pure, m_ls_dry_pure
+from values import r_kiln, d_kiln, N, S
+from values import m_fg_in_per_m_c
+from values import seconds_in_a_year, minutes_in_a_year
 from problem1 import mass_coal
 
-### ODE ###
-
-def dXdt(hp, Tc, r, X):
-    num = (3*hp*lamda_cond*(T_g_calcination - Tc))
-    den = (-deltaH_rxn*density_ls/Mm_ls *r*(lamda_cond + hp*r*(1/(X-1)**(1/3)-1)))
-    return num / den
-
-def model(X_c, t):
-
-    X1_c = X_c[0]
-    X2_c = X_c[1]
-    X3_c = X_c[2]
-
-    hp = h_p_calcination(X1_c, X2_c, X3_c, t)
-
-    Tc = T_c_calcination(P_CO2(y_CO2(X1_c, X2_c, X3_c)))
-
-    dX1dt = dXdt(hp, Tc, r1, X1_c)
-    dX2dt = dXdt(hp, Tc, r2, X2_c)
-    dX3dt = dXdt(hp, Tc, r3, X3_c)
-    
-    return [dX1dt, dX2dt, dX3dt]
 
 
-def T_c_calcination(P_CO2):
-    # The core temperature T_c is a function of 
-    # the partial pressure of CO2 in the flue gas, P_CO2
-    
-    # Baker, 1962: log10(P_CO2) = -8308/T + 7.079
-    # [P_CO2] = 1atm, [T] = K
+def dXdt(r, X, Tc, hp):
 
-    T = Symbol('T')
-    T_c = solve(np.log10(float(P_CO2)) + 8308/T -7.079, T)
+    num = 3*hp*lamda_cond*(T_g_calcination-Tc)
 
-    return T_c
+    if (X-1 < 0):
+        den = deltaH_rxn*density_ls/Mm_ls * r*(lamda_cond + hp*r*(1/((-1)*(1-X)**(float(1/3))-1)) )
+    else:
+        den = deltaH_rxn*density_ls/Mm_ls * r*(lamda_cond + hp*r*(1/((X-1)**(float(1/3))-1)))
 
-def P_CO2(y_CO2):
-    # Calculates partial pressure of CO2 in the flue gas
-    # y_H2O is the molar fraction of CO2 in the flue gas
-    # Assuming total pressure of flue gas is 1 bar
+    return num/den
 
-    P_tot = 1   # [K]
 
-    return y_CO2 * P_tot
+def T_c_calcination(X1_c, X2_c, X3_c):
 
-def y_CO2(X1_c, X2_c, X3_c):
-    # Calculate molar fraction of CO2 in the flue gas
-    # X is the particle conversion
-
+    # CALCULATING y_CO2
     n_CO2_fg_in = n_fg * mass_coal * x_CO2_in
     n_fg_in     = n_fg * mass_coal
 
     n_CO2_c = ((1-X1_c)*w1 + (1-X2_c)*w2 + (1-X3_c)*w3)*n_ls_dry_pure
-
-    return (n_CO2_fg_in + n_CO2_c)/(n_fg_in + n_CO2_c)
-
-def h_p_calcination(X1_c, X2_c, X3_c, t):
-    # Calculating mass of flue gas in
-    m_fg_in = (x_CO2_in/Mm_CO2 + x_N2_in/Mm_N2 + x_SO2_in/Mm_SO2 + x_NO_in/Mm_NO + x_Cl2_in/Mm_Cl2 + x_H2O_in/Mm_H2O + x_O2_in/Mm_O2) * n_fg * Mm_CO2
     
-    m_CO2_c = ((1-X1_c)*w1 + (1-X2_c)*w2 + (1-X3_c)*w3)*n_ls_dry_pure / Mm_CO2
+    y_CO2 = (n_CO2_fg_in + n_CO2_c)/(n_fg_in + n_CO2_c)
 
-    G = (m_fg_in + m_CO2_c) / A_cross_sectional_kiln
+    ### CALCULATING p_CO2
+    P_CO2 = y_CO2 * 1 # [atm], p_tot = 1atm
+
+    ### CALCULATING T_c from Baker
+    T = Symbol('T')
+    T_c = solve(np.log10(float(P_CO2)) + 8308/T -7.079, T)[0]
+
+    return T_c
+
+
+
+def h_p_calcination(X1_c, X2_c, X3_c):
+
+    G = m_fg_in_per_m_c*mass_coal/seconds_in_a_year
+    G += w1*(1-X1_c)*n_ls_dry_pure*Mm_CO2/seconds_in_a_year 
+    G += w2*(1-X2_c)*n_ls_dry_pure*Mm_CO2/seconds_in_a_year
+    G += w3*(1-X3_c)*n_ls_dry_pure*Mm_CO2/seconds_in_a_year
+    G = G/(pi*r_kiln**2)
+
 
     hw = 23.7*G**(0.67)
 
-    A_kiln_wall = 2*pi*r_kiln* (t*N*D_ft*S)/0.19
+    A_kiln_wall = 2*pi*r_kiln* (N*d_kiln*S)/0.19
 
     A_particle = 0
     if X1_c < 1:
-        A_particle += w1*m_ls_dry / (density_ls*r1) * 3
+        A_particle += w1 * m_ls_dry_pure/(minutes_in_a_year) * 3 /(density_ls*r1)
     if X2_c < 1:
-        A_particle += w2*m_ls_dry / (density_ls*r2) * 3
+        A_particle += w2 * m_ls_dry_pure/(minutes_in_a_year) * 3/(density_ls*r2)
     if X3_c < 1:
-        A_particle += w1*m_ls_dry / (density_ls*r1) * 3
+        A_particle += w3 * m_ls_dry_pure/(minutes_in_a_year) * 3/(density_ls*r3)
+
     
-    hp = hw * A_kiln_wall/A_particle
+    if A_particle == 0:
+        hp = 0
+
+    else:
+        hp = hw * A_kiln_wall/A_particle
+
+    #print(hp)
 
     return hp
 
 
+
+def model(X, t):
+    X1_c = X[0]
+    X2_c = X[1]
+    X3_c = X[2]
+
+    # Find Tc and hp (functions of X1_c, X2_c, X3_c)
+    Tc = T_c_calcination(X1_c, X2_c, X3_c)
+    hp = h_p_calcination(X1_c, X2_c, X3_c)
+
+    # Find expressions for ODES
+    dX1dt = dXdt(r1, X1_c, Tc, hp)
+    dX2dt = dXdt(r2, X2_c, Tc, hp)
+    dX3dt = dXdt(r3, X3_c, Tc, hp)
+
+    return [dX1dt, dX2dt, dX3dt]
+
+# INITIAL CONDITIONS
+X_0 = [0.0, 0.0, 0.0]
+
+# Number of timepoints
 n = 101
-time_points = np.linspace(0, 100, n)
 
-initial = [0, 0, 0]
+# Time points
+t = np.linspace(0, 30000, n)
 
-store_sol_1 = np.empty_like(time_points)
-store_sol_2 = np.empty_like(time_points)
-store_sol_3 = np.empty_like(time_points)
+# Store solution
+X1_c_store = np.empty_like(t)
+X2_c_store = np.empty_like(t)
+X3_c_store = np.empty_like(t)
 
-store_sol_1[0] = 0
-store_sol_2[0] = 0
-store_sol_3[0] = 0
+# Add initial condition to stored solution
+X1_c_store[0] = X_0[0]
+X2_c_store[0] = X_0[1]
+X3_c_store[0] = X_0[2]
 
+### SOLVING ODE ###
 for i in range(1, n):
-    tspan = [time_points[i-1], time_points[i]]
+    tspan = [t[i-1], t[i]] 
 
-    z = odeint(model, initial, tspan)
+    X = odeint(model, X_0, tspan)  # scipy.integrate.odeint
 
-    store_sol_1[i] = z[1][0]
-    store_sol_2[i] = z[1][1]
-    store_sol_3[i] = z[1][2]
+    # Correct if
+    if X[1][0] > 1:
+        X[1][0] = 1
+    if X[1][1] > 1:
+        X[1][1] = 1
+    if X[1][2] > 1:
+        X[1][2] = 1
 
-    initial = z[1]
+    # Store obtained values i
+    X1_c_store[i] = X[1][0]
+    X2_c_store[i] = X[1][1]
+    X3_c_store[i] = X[1][2]
 
-print(store_sol_1)
+    # Give new initial conditions
+    X_0 = X[1]
+
+plt.plot(t, X1_c_store, "o", label="X1_c")
+plt.plot(t, X2_c_store, "o", label="X2_c")
+plt.plot(t, X3_c_store, "o", label="X3_c")
+plt.legend()
+plt.xlabel("Time t [min]")
+plt.ylabel("Conversion X")
+plt.show()
+
+### FINDING RESIDENCE TIMES ###
+tau1_c = 0
+tau2_c = 0
+tau3_c = 0 
+# print("Før tau1-løkke")
+# for i in range(len(X1_c_store)):
+#     if X1_c_store[i] == 1:
+#         tau1_c = t[i]
+#         break
+
+for i in range(len(X3_c_store)):
+    if X3_c_store[i] == 1:
+        tau3_c = t[i]
+        break
+
+print(tau3_c)
+print("SCRIPT problem4_calcination.py IS DONE")
 
 
 
