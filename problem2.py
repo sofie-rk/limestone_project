@@ -37,7 +37,6 @@ x_O2_out    = n_O2_out  / n_fg_out
 
 ### VERIFYING THAT THE MOLE FRACTIONS ADD UP TO 1 ###
 x_sum_out = x_CO2_out + x_N2_out + x_SO2_out + x_NO_out + x_Cl2_out + x_H2O_out + x_O2_out
-#print("Sum of mole fractions out: ", x_sum_out)
 
 
 ### PRINTING THE RESULT ###
