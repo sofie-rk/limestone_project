@@ -2,6 +2,7 @@ from sympy.abc import x
 from sympy import integrate
 
 def cp(A, B, C, D, E, t):
+    t = t/1000
     cp= A + B*t + C*t**2 + D*t**3 + E/t**2
     return cp
 

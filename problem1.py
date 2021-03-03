@@ -15,11 +15,14 @@ Q_reaction = deltaH_rxn * n_ls_dry_pure
 ### HEAT REQUIRED TO EVAPORATE WATER IN THE LIMESTONE ###
 
 # Heat water liquid from 25C in to 100C (boiling point)
-Q_heat_w_liq = integrate(cp(A_w_l, B_w_l, C_w_l, D_w_l, E_w_l, x), (x, T_fg_in/1000, T_H2O_boil/1000))
+Q_heat_w_liq = integrate(cp(A_w_l, B_w_l, C_w_l, D_w_l, E_w_l, x), (x, T_fg_in, T_H2O_boil))
 
 # Heat water gas from 100C to 300C (flue gas outlet temperature)
-Q_heat_w_gas = integrate(cp(A_w_g, B_w_g, C_w_g, D_w_g, E_w_g, x), (x, T_H2O_boil/1000, T_fg_out/1000))
+Q_heat_w_gas = integrate(cp(A_w_g, B_w_g, C_w_g, D_w_g, E_w_g, x), (x, T_H2O_boil, T_fg_out))
 
+# print("Liq: ", Q_heat_w_liq)
+# print("Evap: ", deltaH_evap)
+# print("Gas: ", Q_heat_w_gas)
 
 Q_evaporation = (Q_heat_w_liq + deltaH_evap + Q_heat_w_gas) * n_H2O_ls
 
@@ -28,7 +31,7 @@ Q_evaporation = (Q_heat_w_liq + deltaH_evap + Q_heat_w_gas) * n_H2O_ls
 
 # CO2 produced in reaction must be heated from 25C til 300C
 
-Q_CO2 = n_CO2_gen * integrate(cp(A_CO2, B_CO2, C_CO2, D_CO2, E_CO2, x), (x, T_fg_in/1000, T_fg_out/1000))
+Q_CO2 = n_CO2_gen * integrate(cp(A_CO2, B_CO2, C_CO2, D_CO2, E_CO2, x), (x, T_fg_in, T_fg_out))
 
 # Need to heat the flue gas from 25C to 300C
 Q_fg = integrate(   x_CO2_in * cp(A_CO2, B_CO2, C_CO2, D_CO2, E_CO2, x) + \
@@ -38,7 +41,7 @@ Q_fg = integrate(   x_CO2_in * cp(A_CO2, B_CO2, C_CO2, D_CO2, E_CO2, x) + \
                     x_Cl2_in * cp(A_Cl2, B_Cl2, C_Cl2, D_Cl2, E_Cl2, x) + \
                     x_H2O_in * cp(A_w_g, B_w_g, C_w_g, D_w_g, E_w_g, x) + \
                     x_O2_in * cp(A_O2, B_O2, C_O2, D_O2, E_O2, x)
-                        , (x, T_fg_in/1000, T_fg_out/1000))
+                        , (x, T_fg_in, T_fg_out))
 
 
 
@@ -54,9 +57,10 @@ Q_heat_loss = 0
 mass_coal = (Q_evaporation + Q_reaction + Q_CO2 + Q_heat_loss) / (LHV_coal - Q_fg*n_fg)
 
 
-# print("Q flue gas: " , Q_fg)
-# print("Q reaction: ", Q_reaction)
-# print("Q evaporation: ", Q_evaporation)
+#print("Q flue gas: " , Q_fg*n_fg)
+#print("Q reaction + CO2: ", Q_reaction + Q_CO2)
+
+#print("Q evaporation: ", Q_evaporation)
 
 print("MASS COAL: ", round(mass_coal/1000), " tonnes")
 

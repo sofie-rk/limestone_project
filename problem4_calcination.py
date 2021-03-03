@@ -15,7 +15,7 @@ from sympy import Symbol
 # importing necessary values from other files
 from values import r1, r2, r3, w1, w2, w3
 from values import deltaH_rxn
-from values import density_ls, Mm_ls, lamda_cond, Mm_CO2
+from values import density_ls, Mm_ls, lamda_cond, lamda_lime, Mm_CO2
 from values import T_g_calcination
 from values import n_fg, x_CO2_in, n_ls_dry_pure, m_ls_dry_pure
 from values import r_kiln, d_kiln, N, S
@@ -27,12 +27,12 @@ from problem1 import mass_coal
 
 def dXdt(r, X, Tc, hp):
 
-    num = 3*hp*lamda_cond*(T_g_calcination-Tc)
+    num = 3*hp*lamda_lime*(T_g_calcination-Tc)
 
     if (X-1 < 0):
-        den = deltaH_rxn*density_ls/Mm_ls * r*(lamda_cond + hp*r*(1/((-1)*(1-X)**(float(1/3))-1)) )
+        den = deltaH_rxn*density_ls/Mm_ls * r*(lamda_lime + hp*r*(1/((-1)*(1-X)**(float(1/3))-1)) )
     else:
-        den = deltaH_rxn*density_ls/Mm_ls * r*(lamda_cond + hp*r*(1/((X-1)**(float(1/3))-1)))
+        den = deltaH_rxn*density_ls/Mm_ls * r*(lamda_lime + hp*r*(1/((X-1)**(float(1/3))-1)))
 
     return num/den
 
@@ -153,7 +153,8 @@ plt.plot(t, X1_c_store, "o", label="X1_c")
 plt.plot(t, X2_c_store, "o", label="X2_c")
 plt.plot(t, X3_c_store, "o", label="X3_c")
 plt.legend()
-plt.xlabel("Time t [min]")
+plt.title("CALCINATION")
+plt.xlabel("Time t [s]")
 plt.ylabel("Conversion X")
 plt.show()
 

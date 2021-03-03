@@ -4,10 +4,10 @@ from numpy import pi, tan
 # ls:   limestone (CaCO3)
 
 ### TEMPERATURES ###
-T_limestone     = 25 + 273  # [K]
+T_limestone     = 25 + 273      # [K]
 T_fg_in         = 25 + 273      # [K] 
-T_fg_out        = 300 + 273    # [K]
-T_H2O_boil      = 100 + 273  # [K]
+T_fg_out        = 300 + 273     # [K]
+T_H2O_boil      = 100 + 273     # [K]
 T_g_calcination = 1100 + 273    # [K]
 T_g_drying      = 300 + 273     # [K]
 
@@ -38,7 +38,8 @@ m_ls_dry_pure = m_ls_dry * purity_ls                # [kg/year] pure and dry CaC
 n_ls_dry_pure = m_ls_dry * purity_ls / Mm_ls        # [mol/year] pure and dry CaCO3 
 
 density_ls = 2.8*1000               # [kg/m^3] CHECK THIS OUT!!!
-lamda_cond = 1.33*60*60                # [J/min/ m K] conductivity lime
+lamda_cond = 1.33                   # [J/s m K] conductivity lime
+lamda_lime = 0.8                   # [J/s mK]
 
 ### ENTHALPIES ###
 deltaH_rxn = 183*10**3          # [J/mol] CaCO3, @25C
@@ -65,14 +66,9 @@ m_fg_in_per_m_c = (x_CO2_in*Mm_CO2 + x_N2_in*Mm_N2 + x_SO2_in*Mm_SO2 + x_NO_in*M
 ### KILN ###
 d_kiln = 3          # [m]
 r_kiln = d_kiln/2   # [m]
-N = (1/3)*60             # rotations per hour (1/3 per minute)
+N = (1/3)             # rotations per seoncd (1/3 per minute)
 S = tan(3*pi/180)           # inclination in ft pr ft
-D_ft = d_kiln*3.28084   # [ft] diamater kiln
-A_cross_sectional_kiln = pi * r_kiln**2     #[m^2]
 
-# print(N)
-# print(S)
-# print(D_ft)
 
 
 ### PARTICLE SIZE DISTRIBUTION OF FAXE BRYOZO ###
@@ -91,6 +87,5 @@ radii_psd = [r1, r2, r3]
 
 
 seconds_in_a_year = 60*60*24*365
-
-
+minutes_in_a_year = 60*24*365
 
