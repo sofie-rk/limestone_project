@@ -48,14 +48,15 @@ Q_fg = integrate(   x_CO2_in * cp(A_CO2, B_CO2, C_CO2, D_CO2, E_CO2, x) + \
 ### HEAT LOSS TO THE ENVIRONMENT ###
 
 Q_heat_loss = 0
+X = 0
+
 
 
 ### ENERGY BALANCE ###
 
 # LHV * mass_coal = Q_evaporation + Q_reaction + Q_heat_loss + Q_CO2 + Q_fl*n_fg*mass_coal
 
-mass_coal = (Q_evaporation + Q_reaction + Q_CO2 + Q_heat_loss) / (LHV_coal - Q_fg*n_fg)
-
+mass_coal = (Q_evaporation + Q_reaction + Q_CO2 ) / (LHV_coal - Q_fg*n_fg - X*LHV_coal)
 
 #print("Q flue gas: " , Q_fg*n_fg)
 #print("Q reaction + CO2: ", Q_reaction + Q_CO2)
@@ -65,3 +66,6 @@ mass_coal = (Q_evaporation + Q_reaction + Q_CO2 + Q_heat_loss) / (LHV_coal - Q_f
 print("MASS COAL: ", round(mass_coal/1000), " tonnes")
 
 ### FURTHER CALCULATIONS ###
+
+print("N_fg_tot IN", n_fg*mass_coal)
+print("N_fg_tot OUT", n_fg*mass_coal + n_CO2_gen + n_H2O_ls)

@@ -6,7 +6,7 @@ import numpy as np
 from values import n_fg, x_H2O_in, x_CO2_in, n_H2O_ls
 from values import m_ls_dry, n_ls_dry_pure, n_CO2_gen, density_ls
 from values import weights_psd, radii_psd, w1, w2, w3, r1, r2, r3
-from values import r_kiln, A_cross_sectional_kiln, N, S, D_ft
+from values import r_kiln, N, S
 from values import Mm_CO2, Mm_H2O, Mm_CO2, Mm_N2, Mm_SO2, Mm_NO, Mm_Cl2, Mm_O2
 from values import x_CO2_in, x_N2_in, x_SO2_in, x_NO_in, x_Cl2_in, x_H2O_in, x_O2_in
 from problem1 import mass_coal

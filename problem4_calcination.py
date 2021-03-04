@@ -34,6 +34,8 @@ def dXdt(r, X, Tc, hp):
     else:
         den = deltaH_rxn*density_ls/Mm_ls * r*(lamda_lime + hp*r*(1/((X-1)**(float(1/3))-1)))
 
+    #print(num/den)
+
     return num/den
 
 
@@ -50,9 +52,13 @@ def T_c_calcination(X1_c, X2_c, X3_c):
     ### CALCULATING p_CO2
     P_CO2 = y_CO2 * 1 # [atm], p_tot = 1atm
 
+    #print("PCO2: ", P_CO2)
+
     ### CALCULATING T_c from Baker
     T = Symbol('T')
     T_c = solve(np.log10(float(P_CO2)) + 8308/T -7.079, T)[0]
+
+    #print("Tc: ", T_c)
 
     return T_c
 
@@ -66,6 +72,7 @@ def h_p_calcination(X1_c, X2_c, X3_c):
     G += w3*(1-X3_c)*n_ls_dry_pure*Mm_CO2/seconds_in_a_year
     G = G/(pi*r_kiln**2)
 
+    #print(G)
 
     hw = 23.7*G**(0.67)
 
@@ -112,7 +119,7 @@ def model(X, t):
 X_0 = [0.0, 0.0, 0.0]
 
 # Number of timepoints
-n = 101
+n = 21
 
 # Time points
 t = np.linspace(0, 30000, n)
@@ -159,21 +166,17 @@ plt.ylabel("Conversion X")
 plt.show()
 
 ### FINDING RESIDENCE TIMES ###
-tau1_c = 0
-tau2_c = 0
+
+
 tau3_c = 0 
-# print("Før tau1-løkke")
-# for i in range(len(X1_c_store)):
-#     if X1_c_store[i] == 1:
-#         tau1_c = t[i]
-#         break
 
 for i in range(len(X3_c_store)):
+    print(X3_c_store[i])
     if X3_c_store[i] == 1:
         tau3_c = t[i]
         break
 
-print(tau3_c)
+print("Residence time calcination: ", tau3_c)
 print("SCRIPT problem4_calcination.py IS DONE")
 
 

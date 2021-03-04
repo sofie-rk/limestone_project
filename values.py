@@ -64,9 +64,9 @@ m_fg_in_per_m_c = (x_CO2_in*Mm_CO2 + x_N2_in*Mm_N2 + x_SO2_in*Mm_SO2 + x_NO_in*M
 
 
 ### KILN ###
-d_kiln = 3          # [m]
+d_kiln = 3         # [m]
 r_kiln = d_kiln/2   # [m]
-N = (1/3)             # rotations per seoncd (1/3 per minute)
+N = 1/3            # rotations per min (1/3 per minute)
 S = tan(3*pi/180)           # inclination in ft pr ft
 
 
@@ -86,6 +86,9 @@ r3 = d3/2                   # [m] mean radius size 3
 radii_psd = [r1, r2, r3]  
 
 
-seconds_in_a_year = 60*60*24*365
-minutes_in_a_year = 60*24*365
+seconds_in_a_year   = 60*60*24*365
+minutes_in_a_year   = 60*24*365
+seconds_in_a_minute = 60
 
+
+print(density_ls/Mm_H2O * w_H2O_ls/(1-w_H2O_ls))
