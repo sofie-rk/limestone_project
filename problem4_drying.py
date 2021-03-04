@@ -70,8 +70,6 @@ def h_p_drying(X1_d, X2_d, X3_d):
     G += n_CO2_gen*Mm_CO2/seconds_in_a_year
     G = G/(pi*r_kiln**2)
 
-    #print(G)
-
     hw = 23.7*G**(0.67)
 
     A_kiln_wall = 2*pi*r_kiln* (N*d_kiln*S)/0.19
@@ -90,8 +88,6 @@ def h_p_drying(X1_d, X2_d, X3_d):
 
     else:
         hp = hw * A_kiln_wall/A_particle
-
-    #print(hp)
 
     return hp
 
@@ -119,7 +115,7 @@ X_0_drying = [0, 0, 0]
 n = 201
 
 # Time points
-t = np.linspace(0, 6000, n)
+t = np.linspace(0, 3000, n)
 
 # Store solution
 X1_d_store = np.empty_like(t)
@@ -137,7 +133,7 @@ for i in range(1, n):
     
     X = odeint(model_drying, X_0_drying, tspan)  # scipy.integrate.odeint
 
-    # Correct if
+    # Correct to make sure conversion never is larger than 1
     if X[1][0] > 1:
         X[1][0] = 1
     if X[1][1] > 1:
@@ -145,10 +141,7 @@ for i in range(1, n):
     if X[1][2] > 1:
         X[1][2] = 1
 
-    # print(X[1][0])
-    # print(X[1][1])
-    # print(X[1][2])
-    # Store obtained values i
+    # Store obtained values
     X1_d_store[i] = X[1][0]
     X2_d_store[i] = X[1][1]
     X3_d_store[i] = X[1][2]
@@ -157,6 +150,7 @@ for i in range(1, n):
     X_0_drying = X[1]
 
 
+### CONSTRUCTING PLOT ###
 plt.plot(t, X1_d_store, label="$X_{1,d}$")
 plt.plot(t, X2_d_store, label="$X_{2,d}$")
 plt.plot(t, X3_d_store, label="$X_{3,d}$")
@@ -166,6 +160,8 @@ plt.xlabel("Time t [s]")
 plt.ylabel("Conversion X [-]")
 plt.show()
 
+
+### FINDING RESIDENCE TIME ###
 tau3_d = 0
 for i in range(len(X3_d_store)):
     if X3_d_store[i] == 1:
@@ -176,6 +172,7 @@ for i in range(len(X3_d_store)):
         if is_finished:
             tau3_d = t[i]
             break
+
 
 print("Residence time drying: ", tau3_d)
 print("SCRIPT problem4_drying.py IS DONE")
