@@ -35,9 +35,6 @@ x_Cl2_out   = n_Cl2_out / n_fg_out
 x_H2O_out   = n_H2O_out / n_fg_out
 x_O2_out    = n_O2_out  / n_fg_out
 
-### VERIFYING THAT THE MOLE FRACTIONS ADD UP TO 1 ###
-x_sum_out = x_CO2_out + x_N2_out + x_SO2_out + x_NO_out + x_Cl2_out + x_H2O_out + x_O2_out
-
 
 ### PRINTING THE RESULT ###
 print("\nCOMPOSITION AT THE EXIT OF THE KILN\n")
