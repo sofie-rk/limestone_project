@@ -114,7 +114,7 @@ X_0_calcination = [0.0, 0.0, 0.0]
 n = 201
 
 # Time points
-t = np.linspace(0, 50000, n)
+t = np.linspace(0, 30000, n)
 
 # Store solution
 X1_c_store = np.empty_like(t)
