@@ -9,7 +9,7 @@ from numpy import pi, tan
 ### TEMPERATURES ###
 T_limestone     = 25 + 273      # [K]
 T_fg_in         = 25 + 273      # [K] 
-T_fg_out        = 600 + 273     # [K]
+T_fg_out        = 300 + 273     # [K]
 T_H2O_boil      = 100 + 273     # [K]
 T_g_calcination = 1100 + 273    # [K]
 T_g_drying      = 300 + 273     # [K]
