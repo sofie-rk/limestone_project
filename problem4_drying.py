@@ -24,27 +24,6 @@ from values import r_kiln, N, S, d_kiln
 
 def dXdt(r, X, Tc, hp):
 
-    # num = 3*hp*lamda_cond*(T_g_drying-Tc)
-
-
-    #print("deltaH_evap: ", deltaH_evap)
-    #print("MmH2O: ", Mm_H2O)
-    #print("w_H2O: ", w_H2O_ls)
-    #print("r: ", r)
-    #print("X: ", X)
-    #print("lamda_cond: ", lamda_cond)
-    #print("hp: ", hp)
-    #print("Tc: ", Tc)
-
-
-    # if (X-1 < 0):
-    #     den = (-1)*deltaH_evap*density_ls/Mm_H2O * w_H2O_ls/(1-w_H2O_ls) * r*(lamda_cond + hp*r*(1/((-1)*(1-X)**(float(1/3))-1)) )
-    # else:
-    #     den = (-1)*deltaH_evap*density_ls/Mm_H2O * w_H2O_ls/(1-w_H2O_ls) * r*(lamda_cond + hp*r*(1/((X-1)**(float(1/3))-1)) )
-
-    # return num/den
-
-
     num = 3*hp*lamda_cond*(T_g_drying-Tc)
 
     if (X-1 < 0):
@@ -60,9 +39,6 @@ def T_c_drying(X1_d, X2_d, X3_d):
     n_H2O_fg_in = n_fg * mass_coal * x_H2O_in
     n_fg_in     = n_fg * mass_coal
 
-    # if (X1_d == 1 and X2_d == 1 and X3_d == 1):
-    #     n_H2O_d = 0
-    # else:
     n_H2O_d = ((1-X1_d)*w1 + (1-X2_d)*w2 + (1-X3_d)*w3) * n_H2O_ls
 
     y_H2O = (n_H2O_fg_in + n_H2O_d)/(n_fg_in + n_CO2_gen + n_H2O_d)
@@ -81,17 +57,6 @@ def T_c_drying(X1_d, X2_d, X3_d):
     T = Symbol('T')
 
     T_c = solve(np.log10(float(P_H2O)) - (A - B/(T+C)), T)
-
-    # print(T_c)
-
-    # if (len(T_c) == 0):
-    #     print("X1d: ", X1_d)
-    #     print("X2d: ", X2_d)
-    #     print("X3d: ", X3_d)
-    #     print("n_H2O_fg_in: ", n_H2O_fg_in)
-    #     print("n_fg_in: ", n_fg_in)
-    #     print("n_H2O_d: ", n_H2O_d)
-    #     print("n_CO2_gen: ", n_CO2_gen)
 
     return T_c[0]
 
@@ -150,10 +115,10 @@ def model_drying(X, t):
 X_0_drying = [0, 0, 0]
 
 # Number of timepoints
-n = 21
+n = 201
 
 # Time points
-t = np.linspace(0, 3500, n)
+t = np.linspace(0, 3000, n)
 
 # Store solution
 X1_d_store = np.empty_like(t)

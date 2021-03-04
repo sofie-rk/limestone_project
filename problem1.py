@@ -67,5 +67,5 @@ print("MASS COAL: ", round(mass_coal/1000), " tonnes")
 
 ### FURTHER CALCULATIONS ###
 
-print("N_fg_tot IN", n_fg*mass_coal)
-print("N_fg_tot OUT", n_fg*mass_coal + n_CO2_gen + n_H2O_ls)
+#print("N_fg_tot IN", n_fg*mass_coal)
+#print("N_fg_tot OUT", n_fg*mass_coal + n_CO2_gen + n_H2O_ls)

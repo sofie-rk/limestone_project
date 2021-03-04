@@ -119,7 +119,7 @@ def model(X, t):
 X_0 = [0.0, 0.0, 0.0]
 
 # Number of timepoints
-n = 21
+n = 101
 
 # Time points
 t = np.linspace(0, 30000, n)
@@ -156,13 +156,13 @@ for i in range(1, n):
     # Give new initial conditions
     X_0 = X[1]
 
-plt.plot(t, X1_c_store, "o", label="X1_c")
-plt.plot(t, X2_c_store, "o", label="X2_c")
-plt.plot(t, X3_c_store, "o", label="X3_c")
+plt.plot(t, X1_c_store, label="$X_{1,c}$")
+plt.plot(t, X2_c_store, label="$X_{2,c}")
+plt.plot(t, X3_c_store, label="X3_{3,c}")
 plt.legend()
 plt.title("CALCINATION")
 plt.xlabel("Time t [s]")
-plt.ylabel("Conversion X")
+plt.ylabel("Conversion X [-]")
 plt.show()
 
 ### FINDING RESIDENCE TIMES ###
@@ -171,10 +171,10 @@ plt.show()
 tau3_c = 0 
 
 for i in range(len(X3_c_store)):
-    print(X3_c_store[i])
     if X3_c_store[i] == 1:
         tau3_c = t[i]
         break
+    
 
 print("Residence time calcination: ", tau3_c)
 print("SCRIPT problem4_calcination.py IS DONE")

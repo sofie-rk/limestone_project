@@ -91,4 +91,3 @@ minutes_in_a_year   = 60*24*365
 seconds_in_a_minute = 60
 
 
-print(density_ls/Mm_H2O * w_H2O_ls/(1-w_H2O_ls))
