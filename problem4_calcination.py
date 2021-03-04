@@ -1,4 +1,3 @@
-# numpy makes math in python easier
 import numpy as np
 from numpy import pi
 
@@ -8,7 +7,7 @@ import matplotlib.pyplot as plt
 # scipy.integrate.odeint is used for solving ODE
 from scipy.integrate import odeint
 
-# sympy.solvers.solve is used to solve equations for Tc
+# sympy.solvers.solve is used to solve equation for Tc
 from sympy.solvers import solve
 from sympy import Symbol
 
@@ -23,17 +22,19 @@ from values import m_fg_in_per_m_c
 from values import seconds_in_a_year, minutes_in_a_year
 from problem1 import mass_coal
 
+
 print("STARTING problem4_calcination.py")
+
 
 def dXdt(r, X, Tc, hp):
 
     num = 3*hp*lamda_lime*(T_g_calcination-Tc)
 
+    # (X-1)**(1/3) will crash is (X-1)<0
     if (X-1 < 0):
         den = deltaH_rxn*density_ls/Mm_ls * r*(lamda_lime + hp*r*(1/((-1)*(1-X)**(float(1/3))-1)) )
     else:
         den = deltaH_rxn*density_ls/Mm_ls * r*(lamda_lime + hp*r*(1/((X-1)**(float(1/3))-1)))
-
 
     return num/den
 
@@ -51,13 +52,9 @@ def T_c_calcination(X1_c, X2_c, X3_c):
     ### CALCULATING p_CO2
     P_CO2 = y_CO2 * 1 # [atm], p_tot = 1atm
 
-    #print("PCO2: ", P_CO2)
-
     ### CALCULATING T_c from Baker
     T = Symbol('T')
     T_c = solve(np.log10(float(P_CO2)) + 8308/T -7.079, T)[0]
-
-    #print("Tc: ", T_c)
 
     return T_c
 
@@ -70,8 +67,6 @@ def h_p_calcination(X1_c, X2_c, X3_c):
     G += w2*(1-X2_c)*n_ls_dry_pure*Mm_CO2/seconds_in_a_year
     G += w3*(1-X3_c)*n_ls_dry_pure*Mm_CO2/seconds_in_a_year
     G = G/(pi*r_kiln**2)
-
-    #print(G)
 
     hw = 23.7*G**(0.67)
 
@@ -92,13 +87,11 @@ def h_p_calcination(X1_c, X2_c, X3_c):
     else:
         hp = hw * A_kiln_wall/A_particle
 
-    #print(hp)
-
     return hp
 
 
 
-def model(X, t):
+def model_calcination(X, t):
     X1_c = X[0]
     X2_c = X[1]
     X3_c = X[2]
@@ -115,7 +108,7 @@ def model(X, t):
     return [dX1dt, dX2dt, dX3dt]
 
 # INITIAL CONDITIONS
-X_0 = [0.0, 0.0, 0.0]
+X_0_calcination = [0.0, 0.0, 0.0]
 
 # Number of timepoints
 n = 201
@@ -129,17 +122,17 @@ X2_c_store = np.empty_like(t)
 X3_c_store = np.empty_like(t)
 
 # Add initial condition to stored solution
-X1_c_store[0] = X_0[0]
-X2_c_store[0] = X_0[1]
-X3_c_store[0] = X_0[2]
+X1_c_store[0] = X_0_calcination[0]
+X2_c_store[0] = X_0_calcination[1]
+X3_c_store[0] = X_0_calcination[2]
 
 ### SOLVING ODE ###
 for i in range(1, n):
     tspan = [t[i-1], t[i]] 
 
-    X = odeint(model, X_0, tspan)  # scipy.integrate.odeint
+    X = odeint(model_calcination, X_0_calcination, tspan)  # scipy.integrate.odeint
 
-    # Correct if
+    # Correct to make sure conversion never is larger than 1
     if X[1][0] > 1:
         X[1][0] = 1
     if X[1][1] > 1:
@@ -147,14 +140,16 @@ for i in range(1, n):
     if X[1][2] > 1:
         X[1][2] = 1
 
-    # Store obtained values i
+    # Store obtained values
     X1_c_store[i] = X[1][0]
     X2_c_store[i] = X[1][1]
     X3_c_store[i] = X[1][2]
 
     # Give new initial conditions
-    X_0 = X[1]
+    X_0_calcination = X[1]
 
+
+### CONSTRUCT PLOT ###
 plt.plot(t, X1_c_store, label="$X_{1,c}$")
 plt.plot(t, X2_c_store, label="$X_{2,c}$")
 plt.plot(t, X3_c_store, label="$X_{3,c}$")
@@ -169,6 +164,8 @@ tau3_c = 0
 
 for i in range(len(X3_c_store)):
     if X3_c_store[i] == 1:
+        # Make sure that it is not a "random" X3=1, but that 
+        # the particle actually is fully converted
         is_finished = True
         for j in range(i, i+10):
             if X3_c_store[j] != 1:
