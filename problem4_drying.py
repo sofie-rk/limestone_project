@@ -10,7 +10,6 @@ from sympy import Symbol
 
 from problem1 import mass_coal
 
-#from problem4_calcination import tau1_c, tau2_c, tau3_c
 from values import deltaH_evap, w_H2O_ls
 from values import lamda_cond, T_g_drying 
 from values import m_ls_dry_pure, density_ls
@@ -21,6 +20,8 @@ from values import n_H2O_ls, n_CO2_gen
 from values import seconds_in_a_year, minutes_in_a_year
 from values import m_fg_in_per_m_c
 from values import r_kiln, N, S, d_kiln
+
+print("STARTING problem4_drying.py")
 
 def dXdt(r, X, Tc, hp):
 
@@ -118,7 +119,7 @@ X_0_drying = [0, 0, 0]
 n = 201
 
 # Time points
-t = np.linspace(0, 3000, n)
+t = np.linspace(0, 6000, n)
 
 # Store solution
 X1_d_store = np.empty_like(t)
@@ -156,20 +157,25 @@ for i in range(1, n):
     X_0_drying = X[1]
 
 
-plt.plot(t, X1_d_store, label="X1_d")
-plt.plot(t, X2_d_store, label="X2_d")
-plt.plot(t, X3_d_store, label="X3_d")
+plt.plot(t, X1_d_store, label="$X_{1,d}$")
+plt.plot(t, X2_d_store, label="$X_{2,d}$")
+plt.plot(t, X3_d_store, label="$X_{3,d}$")
 plt.legend()
 plt.title("DRYING")
 plt.xlabel("Time t [s]")
-plt.ylabel("Conversion X")
+plt.ylabel("Conversion X [-]")
 plt.show()
 
 tau3_d = 0
 for i in range(len(X3_d_store)):
     if X3_d_store[i] == 1:
-        tau3_d = t[i]
-        break
+        is_finished = True
+        for j in range(i, i+10):
+            if X3_d_store[j] != 1:
+                is_finished = False
+        if is_finished:
+            tau3_d = t[i]
+            break
 
 print("Residence time drying: ", tau3_d)
 print("SCRIPT problem4_drying.py IS DONE")

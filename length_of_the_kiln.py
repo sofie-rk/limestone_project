@@ -1,5 +1,5 @@
-#from problem4_calcination import tau3_c
-#from problem4_drying import tau3_d
+from problem4_calcination import tau3_c
+from problem4_drying import tau3_d
 
 from problem1 import mass_coal
 
@@ -7,8 +7,11 @@ from values import N, S, d_kiln
 from values import seconds_in_a_minute
 
 
-tau3_c = 26100
-tau3_d = 2730
+# tau3_c = 26100
+# tau3_d = 2730
+
+# tau3_c = 44500
+# tau3_d = 4650
 
 total_residence_time = tau3_c + tau3_d
 

@@ -13,13 +13,11 @@ label_mc = "Mass of coal"
 def generate_3plots(variation, time, length, mc, xlabel):
     plt.subplot(3, 1, 1)
     plt.plot(variation, time, "o-", label=label_time, color="red")
-    plt.xlabel(xlabel)
     plt.ylabel(ylabel_time)
     plt.legend()
 
     plt.subplot(3, 1, 2)
     plt.plot(variation, length, "o-", label=label_length, color="blue")
-    plt.xlabel(xlabel)
     plt.ylabel(ylabel_length)
     plt.legend()
 
@@ -59,11 +57,11 @@ def generate_1plot(xaxis, yaxis, xlabel, ylabel, plotlabel):
 
 # CHANGING TEMPERATURE OF FLUE GAS OUT OF THE REACTOR
 temperatures = [200, 300, 400, 500, 600]
-time_temp = [27750, 26250, 24750, 23250, 21750]
-length_temp = [127.57, 120.68, 113.78, 106.88, 99.99]
-mc_temp = [8553, 9289, 10146, 11155, 12366]
+time_temp = [30350, 28830, 27110, 25490, 23870]
+length_temp = [139.52, 132.56, 124.63, 117.18, 109.74]
+mc_temp = [8552, 9289, 10146, 11155, 12366]
 
-#generate_3plots(temperatures, time_temp, length_temp, mc_temp, "Temperature of flue gas out of the kiln [$^oC$]")
+generate_3plots(temperatures, time_temp, length_temp, mc_temp, "Temperature of flue gas out of the kiln [$^oC$]")
 
 
 # CHANGING HEAT LOSS 
@@ -72,21 +70,21 @@ time_heatloss = [26250, 24150, 22050, 19650]
 length_heatloss = [120.68, 111, 101.37, 90]
 mc_heatloss = [9289, 10496, 12064, 14183, 17205]
 
-#generate_1plot(heat_loss, mc_heatloss, "Heat loss [%]", ylabel_mc, label_mc)
+generate_1plot(heat_loss, mc_heatloss, "Heat loss [%]", ylabel_mc, label_mc)
 
 # CHANGING DIAMETER
-diameters = [2, 2.5, 3, 3.5]
-time_dia = [34550, 29750, 26250, 21350]
-length_dia = [105, 113.97, 120.68, 130.87]
+diameters = [2, 3, 4, 5]
+time_dia = [38130, 28830, 23500, 20170]
+length_dia = [116.86, 132.56, 144.05, 154.54]
 mc_dia = [9289, 9289, 9289, 9289]
 
-#generate_3plots(diameters, time_dia, length_dia, mc_dia, "Diameter of the kiln [m]")
+generate_3plots(diameters, time_dia, length_dia, mc_dia, "Diameter of the kiln [m]")
 #generate_2plots(diameters, time_dia, length_dia, "Diameter of the kiln [m]", ylabel_time, ylabel_length, label_time, label_length)
 
 # CHANGING ROTATIONS
-rotations = [0.2, 0.25, 0.33333, 0.4]
-time_rot = [44700, 35350, 26250, 21750]
-length_rot = [123.30, 121.88, 120.68, 119.98]
+rotations = [0.2, 0.33333, 0.4, 0.5]
+time_rot = [49150, 28830, 23750, 18800]
+length_rot = [135.57, 132.56, 131.02, 129.64]
 mc_rot = [9289, 9289, 9289, 9289]
 
 #generate_2plots(rotations, time_rot, length_rot, "Rotations per minute", ylabel_time, ylabel_length, label_time, label_length)

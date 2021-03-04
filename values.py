@@ -1,4 +1,7 @@
+### VALUES USED IN CALCULATIONS ###
+
 from numpy import pi, tan
+
 ### ABBREVATIONS USED IN CODE ###
 # fg:   flue gas
 # ls:   limestone (CaCO3)
@@ -6,7 +9,7 @@ from numpy import pi, tan
 ### TEMPERATURES ###
 T_limestone     = 25 + 273      # [K]
 T_fg_in         = 25 + 273      # [K] 
-T_fg_out        = 300 + 273     # [K]
+T_fg_out        = 600 + 273     # [K]
 T_H2O_boil      = 100 + 273     # [K]
 T_g_calcination = 1100 + 273    # [K]
 T_g_drying      = 300 + 273     # [K]
@@ -37,17 +40,17 @@ purity_ls = 0.987                                   # [-] weight fraction pure l
 m_ls_dry_pure = m_ls_dry * purity_ls                # [kg/year] pure and dry CaCO3
 n_ls_dry_pure = m_ls_dry * purity_ls / Mm_ls        # [mol/year] pure and dry CaCO3 
 
-density_ls = 2.8*1000               # [kg/m^3] CHECK THIS OUT!!!
-lamda_cond = 1.33                   # [J/s m K] conductivity lime
-lamda_lime = 0.8                   # [J/s mK]
+density_ls = 2.8*1000           # [kg/m^3] density of dry limestone
+lamda_cond = 1.33               # [J/s m K] conductivity dry limestone
+lamda_lime = 0.8                # [J/s m K] conductiviy lime
 
 ### ENTHALPIES ###
-deltaH_rxn = 183*10**3          # [J/mol] CaCO3, @25C
-deltaH_evap = 40660             # [J/mol] !!!!CHECK THIS
+deltaH_rxn = 183*10**3          # [J/mol] CaCO3, reaction enthalpy @25C
+deltaH_evap = 40660             # [J/mol] heat of evaporation of water @100C
 
 ### OTHER VALUES ###
 n_fg = 426                  # [mol/kg coal] mole of flue gas generated per kg coal combusted
-LHV_coal = 28.4 * 10**6     # [J/kg coal] heating value of coal
+LHV_coal = 28.4 * 10**6     # [J/kg coal] lower heating value of coal
 
 ### MOLE FRACTION COMPOSITION OF FLUE GAS AT THE ENTRY ###
 x_CO2_in = 14.4/100
@@ -58,34 +61,31 @@ x_Cl2_in = 0.001/100
 x_H2O_in = 6.6/100
 x_O2_in = 3.3/100
 
+# Mass flue gas in per mass flue gas
 m_fg_in_per_m_c = (x_CO2_in*Mm_CO2 + x_N2_in*Mm_N2 + x_SO2_in*Mm_SO2 + x_NO_in*Mm_NO + \
                     x_Cl2_in*Mm_Cl2 + x_H2O_in*Mm_H2O + x_O2_in*Mm_O2) * n_fg
 
 
 
-### KILN ###
-d_kiln = 3         # [m]
-r_kiln = d_kiln/2   # [m]
-N = 1/3            # rotations per min (1/3 per minute)
-S = tan(3*pi/180)           # inclination in ft pr ft
-
+### KILN INFORMATION ###
+d_kiln = 3          # [m] diameter
+r_kiln = d_kiln/2   # [m] radius
+N = 1/3             # rotations per min
+S = tan(3*pi/180)   # inclination in ft pr ft
 
 
 ### PARTICLE SIZE DISTRIBUTION OF FAXE BRYOZO ###
-w1 = 27 / 100               # [-]
-w2 = 40 / 100               # [-]
-w3 = 33 / 100               # [-]
-weights_psd = [w1, w2, w3]
-d1 = (8+6)/2    * 10**(-3)  # [m] MEAN DIAMETER SIZE 1
-d2 = (25+27)/2  * 10**(-3)  # [m] MEAN DIAMETER SIZE 2
-d3 = (44+46)/2  * 10**(-3)  # [m] MEAN DIAMATER SIZE 3
-diameters_psd = [d1, d2, d3]
+w1 = 27 / 100               # [-] weight fraction of particles in of size 1
+w2 = 40 / 100               # [-] weight fraction of particles in of size 2
+w3 = 33 / 100               # [-] weight fraction of particles in of size 3
+d1 = (8+6)/2    * 10**(-3)  # [m] mean diameter size 1
+d2 = (25+27)/2  * 10**(-3)  # [m] mean diameter size 2
+d3 = (44+46)/2  * 10**(-3)  # [m] mean diameter size 3
 r1 = d1/2                   # [m] mean radius size 1
 r2 = d2/2                   # [m] mean radius size 2
 r3 = d3/2                   # [m] mean radius size 3
-radii_psd = [r1, r2, r3]  
 
-
+### CONVERSION FACTORS ###
 seconds_in_a_year   = 60*60*24*365
 minutes_in_a_year   = 60*24*365
 seconds_in_a_minute = 60

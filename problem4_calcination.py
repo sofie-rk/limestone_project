@@ -23,7 +23,7 @@ from values import m_fg_in_per_m_c
 from values import seconds_in_a_year, minutes_in_a_year
 from problem1 import mass_coal
 
-
+print("STARTING problem4_calcination.py")
 
 def dXdt(r, X, Tc, hp):
 
@@ -34,7 +34,6 @@ def dXdt(r, X, Tc, hp):
     else:
         den = deltaH_rxn*density_ls/Mm_ls * r*(lamda_lime + hp*r*(1/((X-1)**(float(1/3))-1)))
 
-    #print(num/den)
 
     return num/den
 
@@ -119,10 +118,10 @@ def model(X, t):
 X_0 = [0.0, 0.0, 0.0]
 
 # Number of timepoints
-n = 101
+n = 201
 
 # Time points
-t = np.linspace(0, 30000, n)
+t = np.linspace(0, 50000, n)
 
 # Store solution
 X1_c_store = np.empty_like(t)
@@ -157,23 +156,27 @@ for i in range(1, n):
     X_0 = X[1]
 
 plt.plot(t, X1_c_store, label="$X_{1,c}$")
-plt.plot(t, X2_c_store, label="$X_{2,c}")
-plt.plot(t, X3_c_store, label="X3_{3,c}")
+plt.plot(t, X2_c_store, label="$X_{2,c}$")
+plt.plot(t, X3_c_store, label="$X_{3,c}$")
 plt.legend()
 plt.title("CALCINATION")
 plt.xlabel("Time t [s]")
 plt.ylabel("Conversion X [-]")
 plt.show()
 
-### FINDING RESIDENCE TIMES ###
-
-
+### FINDING RESIDENCE TIME ###
 tau3_c = 0 
 
 for i in range(len(X3_c_store)):
     if X3_c_store[i] == 1:
-        tau3_c = t[i]
-        break
+        is_finished = True
+        for j in range(i, i+10):
+            if X3_c_store[j] != 1:
+                is_finished = False
+        
+        if is_finished:
+            tau3_c = t[i]
+            break
     
 
 print("Residence time calcination: ", tau3_c)
