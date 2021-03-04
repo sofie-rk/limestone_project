@@ -1,3 +1,5 @@
+# Plot results from the sensitivity analysis
+
 import matplotlib.pyplot as plt
 
 # Y-labels
@@ -10,6 +12,7 @@ label_time = "Total residence time"
 label_length = "Length of the kiln"
 label_mc = "Mass of coal"
 
+# Genereal code for making plot of residence time, length and mass of coal
 def generate_3plots(variation, time, length, mc, xlabel):
     plt.subplot(3, 1, 1)
     plt.plot(variation, time, "o-", label=label_time, color="red")
@@ -29,24 +32,8 @@ def generate_3plots(variation, time, length, mc, xlabel):
 
     plt.show()
 
-def generate_2plots(xaxis, yaxis1, yaxis2, xlabel, ylabel1, ylabel2, plotlabel1, plotlabel2):
-    plt.subplot(2, 1, 1)
-    plt.plot(xaxis, yaxis1, '-o', label=plotlabel1, color="red")
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel1)
-    plt.legend()
 
-    plt.subplot(2, 1, 2)
-    plt.plot(xaxis, yaxis2, '-o', label=plotlabel2, color="blue")
-    plt.xlabel(xlabel)
-    plt.plot(ylabel2)
-    #plt.xlim(xaxis[0], xaxis[-1])
-    plt.legend()
-
-    plt.show()
-
-
-
+# General plot for making a single plot
 def generate_1plot(xaxis, yaxis, xlabel, ylabel, plotlabel):
 
     plt.plot(xaxis, yaxis, "o-", label=plotlabel, color="blue")
@@ -79,7 +66,6 @@ length_dia = [116.86, 132.56, 144.05, 154.54]
 mc_dia = [9289, 9289, 9289, 9289]
 
 generate_3plots(diameters, time_dia, length_dia, mc_dia, "Diameter of the kiln [m]")
-#generate_2plots(diameters, time_dia, length_dia, "Diameter of the kiln [m]", ylabel_time, ylabel_length, label_time, label_length)
 
 # CHANGING ROTATIONS
 rotations = [0.2, 0.33333, 0.4, 0.5]
@@ -87,5 +73,4 @@ time_rot = [49150, 28830, 23750, 18800]
 length_rot = [135.57, 132.56, 131.02, 129.64]
 mc_rot = [9289, 9289, 9289, 9289]
 
-#generate_2plots(rotations, time_rot, length_rot, "Rotations per minute", ylabel_time, ylabel_length, label_time, label_length)
 generate_3plots(rotations, time_rot, length_rot, mc_rot, "Rotations per minute")
